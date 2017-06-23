@@ -1,0 +1,24 @@
+{
+  "name": "trasnmission-node-rest",
+  "version": "1.0.0",
+  "description": "A REST Server using the transmission lib. The library don't work on web navigators. With this lib you can connect with your Angular App or React.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RaulGF92/transmission-node-rest.git"
+  },
+  "author": "raulgf92",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RaulGF92/transmission-node-rest/issues"
+  },
+  "homepage": "https://github.com/RaulGF92/transmission-node-rest#readme",
+  "dependencies": {
+    "express": "^4.15.3",
+    "express-fileupload": "^0.1.3",
+    "transmission": "^0.4.9"
+  }
+}
