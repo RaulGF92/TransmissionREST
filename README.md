@@ -16,6 +16,9 @@ The REST server starting using the default properties of the file ''properties.j
    3. url:  URL mapped of rpc server must be '/transmission/' or '/transmission/rpc'
    4. port: Port where the transmission server is listenning must be the 9091 (number not string)
 2. adminPassword: Password use in methods admin POST of server
+
+If you like change something about the server you must turn off the server, change all the you want and them turn on the service.
+
 # Using the program
 If you need know all the orders you only make a petition http to the IP of the server and the server send it a list of HTTP method.
 
