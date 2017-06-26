@@ -11,10 +11,10 @@ then you only need run the main program using the next command:
 # Config the server
 The REST server starting using the default properties of the file ''properties.json''. The properties file is in the main path and hav some variables:
 1. defaultServer: Is the server data object use for the rest server to connect to tranmission external servers
-  1. username/password: User info show in the transmission properties
-  2. host: IP Direction of your transmission server
-  3. url:  URL mapped of rpc server must be '/transmission/' or '/transmission/rpc'
-  4. port: Port where the transmission server is listenning must be the 9091 (number not string)
+   1. username/password: User info show in the transmission properties
+   2. host: IP Direction of your transmission server
+   3. url:  URL mapped of rpc server must be '/transmission/' or '/transmission/rpc'
+   4. port: Port where the transmission server is listenning must be the 9091 (number not string)
 2. adminPassword: Password use in methods admin POST of server
 # Using the program
 If you need know all the orders you only make a petition http to the IP of the server and the server send it a list of HTTP method.
