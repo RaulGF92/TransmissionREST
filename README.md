@@ -21,11 +21,19 @@ If you need know all the orders you only make a petition http to the IP of the s
 
 ```
 {'methods' : [
-    {'url':'/','description':'Get all URL methods','state': 'CHECK'},
-    {'url':'/info','description':'Get transmission server info','state': 'CHECK'},
-    {'url':'/all','description':'Get all torrents in server','state': 'CHECK'},
-    {'url':'/active','description':'Get all active torrents','state': 'CHECK'}
-]}
+    {'get':[
+        {'url':'/','description':'Get all URL methods','state': 'CHECK'},
+        {'url':'/load','description':'Load the transmissionServer','state': 'CHECK'},
+        {'url':'/info','description':'Get transmission server info','state': 'CHECK'},
+        {'url':'/all','description':'Get all torrents in server','state': 'CHECK'},
+        {'url':'/active','description':'Get all active torrents','state': 'CHECK'}
+        ]
+    },
+    {'post':[
+            {'url':'/torrent/add/file','description':'Accept a File for start a torrent download','state': 'CHECK'},
+            {'url':'/load','description':'Accept a JSON object to Load the transmissionServer (make get /load method)','state': 'CHECK'}
+        ]
+    }]}
 ```
 For upload .torrent you must using a form in a website, using the next example you can change a file between the client and the server. You must change the action and put the IP of your node server.
 
