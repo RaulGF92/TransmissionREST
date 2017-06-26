@@ -1,0 +1,12 @@
+{"properties":{
+
+    "defaultServer":{
+        "port": 9091,			
+        "host": "127.0.0.1",			
+        "username": "transmission",	
+        "password": "transmission",
+        "url":"/transmission/rpc"	
+    },
+    
+    "adminPassword":"contrasena"
+}}

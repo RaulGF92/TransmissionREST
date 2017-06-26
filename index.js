@@ -4,6 +4,7 @@ const transmission = require('./transmissionAPI');
 const bodyParser = require('body-parser');
 const multer = require('multer'); // v1.0.5
 const upload = multer(); // for parsing multipart/form-data
+const fs = require('fs');
 
 const methods={'methods' : [
     {'get':[
@@ -21,17 +22,11 @@ const methods={'methods' : [
 
 //var loader = false;
 var loader = true;
-
-var server = {
-        port: 9091,			
-        host: '192.168.103.16',			
-        username: 'transmission',	
-        password: 'transmission',
-        url:'/transmission/rpc'	
-    };
-var adminPassword="contrasena";
+var server={}
+var adminPassword="";
 
 //-------------------------[ REST SERVER CONFIG ]---------------------------------------------- 
+
 
 const app = express();
 app.use(fileUpload());
@@ -42,6 +37,8 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
+
+loadApp();
 
 //-------------------------[     HTTP METHODS     ]---------------------------------------------- 
 app.get('/',function(req,res){
@@ -161,7 +158,25 @@ app.post('/torrent/add/file', function(req, res) {
     
 });
 
+function loadApp(){
+    fs.readFile('properties.json','UTF8',function name(err,data) {
+        if(err){
+            console.error("[Transmission Node Rest] Fail loading properties");
+            process.exit(1);
+        }
+
+        objToLoad=JSON.parse(data).properties;
+        server=objToLoad.defaultServer;
+        adminPassword=objToLoad.adminPassword;
+
+        app.listen('8888',function(){
+            console.info("[Transmission Node Rest] is listenning on PORT 8888");
+            console.info("Server transmission Info:");
+            console.info(server);
+        });
+    })
+}
+
 //-------------------------[ Express Server invoke ]---------------------------------------------- 
-app.listen('8888',function(){
-    console.info("[Transmission Node Rest] is listenning on PORT 8888");
-});
+
+
