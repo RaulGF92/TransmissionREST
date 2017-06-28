@@ -4,9 +4,9 @@ You must download the code using git and them make the update of npm code using 
 > npm upgrade
 
 then you only need run the main program using the next command:
-> node index.js 
+> npm start
 
-*Remember this is a ALFA!!. You must change the server varible on index.js using your transmission server info*
+Remember this Server make a comunication with a transmission server, so you must change server data on properties file. If you don't change for defect the server gonna connect with a teorical server in the localhost (See config the server).
 
 # Config the server
 The REST server starting using the default properties of the file ''properties.json''. The properties file is in the main path and hav some variables:
@@ -29,16 +29,20 @@ If you need know all the orders you only make a petition http to the IP of the s
         {'url':'/load','description':'Load the transmissionServer','state': 'CHECK'},
         {'url':'/info','description':'Get transmission server info','state': 'CHECK'},
         {'url':'/all','description':'Get all torrents in server','state': 'CHECK'},
-        {'url':'/active','description':'Get all active torrents','state': 'CHECK'}
+        {'url':'/active','description':'Get all active torrents','state': 'CHECK'},
+        {'url':'/torrent/start/{id}','description':'start the torrent','state': 'NOT_PROBE'},
+        {'url':'/torrent/stop/{id}','description':'stop the torrent','state': 'NOT_PROBE'},
+        {'url':'/torrent/delete/{id}','description':'delete the torrent','state': 'NOT_PROBE'},
+        {'url':'/torrent/add/url','description':'example of POST petition of the same Map URL','state': 'CHECK'},
         ]
-    },
-    {'post':[
+    },{'post':[
             {'url':'/torrent/add/file','description':'Accept a File for start a torrent download','state': 'CHECK'},
-            {'url':'/load','description':'Accept a JSON object to Load the transmissionServer (make get /load method)','state': 'CHECK'}
+            {'url':'/load','description':'Accept a JSON object to Load the transmissionServer (make get /load method)','state': 'CHECK'},
+            {'url':'/torrent/add/url','description':'Accept a URL for start a torrent download','state': 'NOT_PROBE'},
         ]
-    }]}
+    }]};
 ```
-For upload .torrent you must using a form in a website, using the next example you can change a file between the client and the server. You must change the action and put the IP of your node server.
+For upload .torrent using file method, you must using a form in a website, using the next example you can change a file between the client and the server. You must change the action and put the IP of your node server.
 
 ```
 <html>

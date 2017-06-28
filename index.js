@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const multer = require('multer'); // v1.0.5
 const upload = multer(); // for parsing multipart/form-data
 const fs = require('fs');
+var clc = require('cli-color');
 
 const methods={'methods' : [
     {'get':[
@@ -16,6 +17,7 @@ const methods={'methods' : [
         {'url':'/torrent/start/{id}','description':'start the torrent','state': 'NOT_PROBE'},
         {'url':'/torrent/stop/{id}','description':'stop the torrent','state': 'NOT_PROBE'},
         {'url':'/torrent/delete/{id}','description':'delete the torrent','state': 'NOT_PROBE'},
+        {'url':'/torrent/add/url','description':'example of POST petition of the same Map URL','state': 'CHECK'},
         ]
     },{'post':[
             {'url':'/torrent/add/file','description':'Accept a File for start a torrent download','state': 'CHECK'},
@@ -28,6 +30,7 @@ const methods={'methods' : [
 var loader = true;
 var server={}
 var adminPassword="";
+var change=0;
 
 //-------------------------[ REST SERVER CONFIG ]---------------------------------------------- 
 
@@ -146,16 +149,30 @@ app.get('/torrent/delete/:id',function(req,res){
         res.send({"msg":"The server transmission target don't be loader, please load using /load method"});
         return;
     }
-    
+
     transmission.stopTorrent(id).then(function(data){
         res.send(data);
     });
 });
 
+app.get('/torrent/add/url',function(req,res){
+
+    res.set('Content-Type', 'application/json');
+    var data={'msg':{'url':'http://www.PutUrlYouWant.es'}};
+
+    res.send(data);
+});
+
 //___________________________________POST METHOD_________________________________________________
 
 app.post('/torrent/add/url',function(req,res){
-
+    var url=req.body.msg.url;
+    if(url == undefined || url == null)
+        res.send({msg:'Fail on server entity. Yo need put a entity same as the /load get response'});
+        
+    transmission.addTorrentUrl(url).then(function(data){
+        res.send(data);
+    });
 });
 
 app.post('/load', upload.array(),function (req, res, next) {
@@ -184,8 +201,12 @@ app.post('/load', upload.array(),function (req, res, next) {
 
     if(newServer.port != undefined || newServer.port != null )
         server.port = newServer.port;
+    
+    change++;
+    showInfoConsole();
 
     res.send({'msg':'Serve it gonna connect','server': server});
+    
 });
 
 app.post('/torrent/add/file', function(req, res) {
@@ -222,9 +243,7 @@ function loadApp(){
         adminPassword=objToLoad.adminPassword;
 
         app.listen('8888',function(){
-            console.info("[Transmission Node Rest] is listenning on PORT 8888");
-            console.info("Server transmission Info:");
-            console.info(server);
+            showInfoConsole();
         });
     })
 }
@@ -232,3 +251,14 @@ function loadApp(){
 //-------------------------[ Express Server invoke ]---------------------------------------------- 
 
 
+function showInfoConsole(){
+            var msg = clc.xterm(221);
+            console.clear;
+            console.info("            Transmission Node Rest Made by "+msg('RaulGF92')+"        ");
+            console.info("  ---------------------------------------------------------");
+            console.info("  |  [Transmission Node Rest] is listenning on PORT  "+clc.red('8888')+"  |");
+            console.info("  ---------------------------------------------------------");
+            console.info("                Server transmission Info:     (change:"+change+")  ");
+            console.info("");
+            console.info(server);
+}
