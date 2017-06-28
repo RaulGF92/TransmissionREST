@@ -121,8 +121,91 @@ transmissionAPI.addTorrentString = function(conectOptions,bufferFile){
         return p;
 };   
 
+transmissionAPI.addTorrentUrl=function(url){
+        if(!checkContent(conectOptions)){
+            transmissionAPI._transmission=new Transmission(conectOptions);
+        }else{
+            transmissionAPI._transmission=new Transmission(transmissionAPI.defaultOptions);
+        }
+        
+        var p=new Promise(function(resolve,reject){
+            transmissionAPI._transmission.addUrl(url, {
+                "download-dir" : "~/transmission/torrents"
+            }, function(err, result) {
+                if (err) {
+                    resolve(err);
+                }
+                var id = result.id;
+                resolve({'torrent_ID':  result.id});
+            });         
+        });
 
-function checkContent(object){
+        return p;
+}
+
+transmissionAPI.deleteTorrent=function(id){
+
+    if(!checkContent(conectOptions)){
+        transmissionAPI._transmission=new Transmission(conectOptions);
+    }else{
+        transmissionAPI._transmission=new Transmission(transmissionAPI.defaultOptions);
+    }
+
+    var p=new Promise(function(resolve,reject){
+             transmissionAPI._transmission.remove(id, true, function(err, result){
+                if (err){
+                    resolve(err);
+                } else {
+                     transmissionAPI._transmission.get(id, function(err, result) {
+                        if(err)
+                            resolve({'msg':"Torrent not found with id:"+id});
+                        resolve(result); 
+                    });
+                }
+            });
+    });
+    return p;
+}
+
+transmissionAPI.startTorrent=function(id){
+    
+    if(!checkContent(conectOptions)){
+        transmissionAPI._transmission=new Transmission(conectOptions);
+    }else{
+        transmissionAPI._transmission=new Transmission(transmissionAPI.defaultOptions);
+    }
+
+    var p=new Promise(function(resolve,reject){
+       transmissionAPI._transmission.start(id, function(err, result){
+            if(err)
+                resolve(err);
+            resolve(result);
+        });
+    });
+
+    return p;
+}
+
+transmissionAPI.stopTorrent=function(id){
+    if(!checkContent(conectOptions)){
+        transmissionAPI._transmission=new Transmission(conectOptions);
+    }else{
+        transmissionAPI._transmission=new Transmission(transmissionAPI.defaultOptions);
+    }
+
+    var p=new Promise(function(resolve,reject){
+        transmissionAPI._transmission.stop(id,function(err,result){
+            if(err)
+                resolve(err);
+            resolve(result);
+        });
+    });
+    return p;
+}
+
+
+transmissionAPI.checkContent=function (object){
+
     if(object === undefined || object === null){
         return true
     }else{
@@ -130,7 +213,7 @@ function checkContent(object){
     }
 }
 
-function getStatusType(type){
+transmissionAPI.getStatusType=function (type){
     if(type === 0){
         return 'STOPPED';
     } else if(type === 1){
@@ -150,7 +233,7 @@ function getStatusType(type){
     }
 }
 
-function parseResults(results){
+transmissionAPI.parseResults=function(results){
     var torrents = [];
 
     for(var i=0; i< results.length;i++){
@@ -160,7 +243,7 @@ function parseResults(results){
     return torrents;
 }
 
-function parseTorrent(result){
+transmissionAPI.parseTorrent=function(result){
 
     var torent={
         "name": result.name,

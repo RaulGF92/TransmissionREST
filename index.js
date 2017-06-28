@@ -12,11 +12,15 @@ const methods={'methods' : [
         {'url':'/load','description':'Load the transmissionServer','state': 'CHECK'},
         {'url':'/info','description':'Get transmission server info','state': 'CHECK'},
         {'url':'/all','description':'Get all torrents in server','state': 'CHECK'},
-        {'url':'/active','description':'Get all active torrents','state': 'CHECK'}
+        {'url':'/active','description':'Get all active torrents','state': 'CHECK'},
+        {'url':'/torrent/start/{id}','description':'start the torrent','state': 'NOT_PROBE'},
+        {'url':'/torrent/stop/{id}','description':'stop the torrent','state': 'NOT_PROBE'},
+        {'url':'/torrent/delete/{id}','description':'delete the torrent','state': 'NOT_PROBE'},
         ]
     },{'post':[
             {'url':'/torrent/add/file','description':'Accept a File for start a torrent download','state': 'CHECK'},
-            {'url':'/load','description':'Accept a JSON object to Load the transmissionServer (make get /load method)','state': 'CHECK'}
+            {'url':'/load','description':'Accept a JSON object to Load the transmissionServer (make get /load method)','state': 'CHECK'},
+            {'url':'/torrent/add/url','description':'Accept a URL for start a torrent download','state': 'NOT_PROBE'},
         ]
     }]};
 
@@ -104,6 +108,54 @@ app.get('/active',function(req,res){
     transmission.getAllActiveTorrents(server).then(function(data){
         res.send(data);
     })
+});
+
+app.get('/torrent/start/:id',function(req,res){
+    var id=req.params.id;
+    res.set('Content-Type', 'application/json');
+
+    if(!loader){
+        res.send({"msg":"The server transmission target don't be loader, please load using /load method"});
+        return;
+    }
+
+    transmission.startTorrent(id).then(function(data){
+        res.send(data);
+    });
+});
+
+app.get('/torrent/stop/:id',function(req,res){
+    var id=req.params.id;
+    res.set('Content-Type', 'application/json');
+
+    if(!loader){
+        res.send({"msg":"The server transmission target don't be loader, please load using /load method"});
+        return;
+    }
+
+    transmission.stopTorrent(id).then(function(data){
+        res.send(data);
+    });
+});
+
+app.get('/torrent/delete/:id',function(req,res){
+    var id=req.params.id;
+    res.set('Content-Type', 'application/json');
+
+    if(!loader){
+        res.send({"msg":"The server transmission target don't be loader, please load using /load method"});
+        return;
+    }
+    
+    transmission.stopTorrent(id).then(function(data){
+        res.send(data);
+    });
+});
+
+//___________________________________POST METHOD_________________________________________________
+
+app.post('/torrent/add/url',function(req,res){
+
 });
 
 app.post('/load', upload.array(),function (req, res, next) {
